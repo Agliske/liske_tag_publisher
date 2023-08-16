@@ -1,0 +1,8 @@
+Package: liske_tag_publisher
+Version: 0.0.5
+Section: base
+Priority: optional
+Architecture: arm64
+Depends:libmodal-pipe(>=2.6.0), libmodal-json, voxl-mpa-tools(>=0.2.10)
+Maintainer: Alex Liske 
+Description: ROSNode converting MPA tag_detections to ROS topic
