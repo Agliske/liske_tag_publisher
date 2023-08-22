@@ -100,7 +100,7 @@ static void _simple_cb(int ch, char* data, int bytes, __attribute__((unused)) vo
 			for(int j=0;j<3;j++){
 				
 				
-				msg_R_tag_to_cam.push_back(d.R_tag_to_cam[i][j]); //filling in the std::vector with the elements of our rotation matrix. This flattens the matrix
+				msg_R_tag_to_cam.push_back(d.R_tag_to_cam[j][i]); //filling in the std::vector with the elements of our rotation matrix. This flattens the matrix
 				matrix_iterations = matrix_iterations + 1;
 
 			}
@@ -139,7 +139,7 @@ static void _simple_cb(int ch, char* data, int bytes, __attribute__((unused)) vo
 				for(int j=0;j<3;j++){
 				
 					
-					msg_R_tag_to_fixed.push_back(d.R_tag_to_fixed[i][j]);
+					msg_R_tag_to_fixed.push_back(d.R_tag_to_fixed[j][i]);
 					matrix_iterations = matrix_iterations + 1;
 
 				}
