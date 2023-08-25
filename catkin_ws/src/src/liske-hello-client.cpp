@@ -17,7 +17,7 @@
 #include <getopt.h>
 #include <unistd.h>	// for usleep()
 #include <string.h>
-
+#include <math.h>
 #include <iostream>
 #include <vector>
 
@@ -58,6 +58,25 @@ reading other sorts of MPA data such as camera and IMU data\n\
 -d, --debug                 print debug info\n\
 -h, --help                  print this help message\n\
 \n");
+	return;
+}
+
+
+static void _rotation_matrix_to_tait_bryan_xyz_degrees(float R[3][3], float* roll, float* pitch, float* yaw)
+{
+	#ifndef RAD_TO_DEG
+	#define RAD_TO_DEG (180.0/M_PI)
+	#endif
+
+	*pitch = asin(R[0][2])*RAD_TO_DEG;
+	if(fabs(R[0][2]) < 0.9999999){
+		*roll = atan2(-R[1][2], R[2][2])*RAD_TO_DEG;
+		*yaw  = atan2(-R[0][1], R[0][0])*RAD_TO_DEG;
+	}
+	else{
+		*roll = atan2(-R[2][1], R[1][1])*RAD_TO_DEG;
+		*yaw  = 0.0f;
+	}
 	return;
 }
 
@@ -147,8 +166,19 @@ static void _simple_cb(int ch, char* data, int bytes, __attribute__((unused)) vo
 			msg.R_tag_to_fixed = msg_R_tag_to_fixed;
 		}
 
+
+		float roll, pitch, yaw;
+		_rotation_matrix_to_tait_bryan_xyz_degrees(d.R_tag_to_cam, &roll, &pitch, &yaw);
+
+		std::vector<double> msg_rpy;
+		msg_rpy.push_back(roll);
+		msg_rpy.push_back(pitch);
+		msg_rpy.push_back(yaw);
+
+		msg.rpy_to_cam = msg_rpy;
+
 		
-		//publish the message object that we just filled in
+		//publish the message object that we just filled in 
 		tag_pub_ptr->publish(msg); 
 		
 	}

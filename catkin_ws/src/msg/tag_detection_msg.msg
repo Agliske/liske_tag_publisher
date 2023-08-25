@@ -8,5 +8,5 @@ float64[] T_tag_wrt_cam            #vector of length 3, representing tag positio
 float64[] R_tag_to_cam             #vector of length 9, representing flattened 3x3 rotation matrix,  
 float64[] T_tag_wrt_fixed          #vector of length 3, representing tag position [x,y,z]
 float64[] R_tag_to_fixed           #vector of length 9, representing flattened 3x3 rotation matrix
-
+float64[] rpy_to_cam               #vector of length 3, representing roll, pitch, yaw in degrees with respect to the camera
 int32 reserved                      #reserved
