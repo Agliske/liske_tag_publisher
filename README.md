@@ -4,9 +4,15 @@ ROSNode that takes in mpa data and published it to ROS. There are 9 pieces of me
 
 ## Build Instructions and Installation
 
+0. Make sure adb is set up correctly on voxl and PC: https://docs.modalai.com/setting-up-adb/
+
 1. Requires the voxl-emulator (found [here](https://gitlab.com/voxl-public/support/voxl-docker)) to run docker ARM image
+    * If voxl-emulator is not already installed:
+    * (PC) ```cd [Path To]/voxl-docker```
+    * (PC) ```sudo install-emulator-docker.sh``` 
+    * If voxl-emulator is installed continue here:
     * (PC) ```cd [Path To]/liske_tag_publisher```
-    * (PC) ```sudo voxl-docker -i voxl-emulator:V1.7 (or whatever version you are using)```
+    * (PC) ```sudo voxl-docker -i voxl-emulator:V1.7```  (or whatever version you are using)
 2. Build project binary:
     * (VOXL-EMULATOR) ```./install_build_deps.sh apq8096 dev```
     * (VOXL-EMULATOR) ```./clean.sh```
@@ -18,6 +24,12 @@ ROSNode that takes in mpa data and published it to ROS. There are 9 pieces of me
  
 ### Start Installed liske_tag_publisher Node
 
+Connect to the voxl through adb or ssh:
+
+(PC) ```adb shell``` or ```sudo ssh root@192.168.8.101``` or whatever the voxl's ip address is
+
+
+
 Run the following commands(on voxl):
 
 Verify your ros environment with:
@@ -26,6 +38,11 @@ vi ~/my_ros_env.sh
 ```
 
 if you make any changes make sure to run ```exec bash``` to re-source the file
+
+start a ros master onn the voxl with
+```
+roscore
+```
 
 and then start the node with:
 
@@ -40,6 +57,8 @@ The file location is ```/etc/modalai/tag_locations.conf```
 
 It is important to configure the size of each tag, so that the xyz tag detection distances are correct.
 
+More information about the configuration file found [here](https://docs.modalai.com/voxl-tag-detector-0_9/#tag-detector-configuration-file)
+
 ## Published Data Information
 
 The publisher publishes the MPA data taken from the MPA channel "tag_detections" that is output from the voxl-tag-detector service. It has the following fields
@@ -52,6 +71,7 @@ The publisher publishes the MPA data taken from the MPA channel "tag_detections"
     * float64[] R_tag_to_cam             #vector of length 9, flattened 3x3 rotation matrix, relative to camera frame, rotation order yaw-pitch-roll
     * float64[] T_tag_wrt_fixed          #vector of length 3, representing tag position [x,y,z] relative to fixed frame
     * float64[] R_tag_to_fixed           #vector of length 9, flattened 3x3 rotation matrix, relative to fixed frame, rotation order yaw-pitch-roll
+    * float64[] RPY_to_cam               #vector of length 3, containing the tag's rotation about its X/Y/Z axes with respect to the camera frame, in degrees
     * int32 reserved                     #reserved
     
 ## Troubleshooting
@@ -64,7 +84,7 @@ The publisher publishes the MPA data taken from the MPA channel "tag_detections"
 
 ## Additional Documentation
 
-voxl-tag-detector documentation https://docs.modalai.com/voxl-tag-detector-0_9/#tag-coordinate-frame
+voxl-tag-detector documentation https://docs.modalai.com/voxl-tag-detector-0_9
 
 <!-- ### Expected Behavior
 ```
