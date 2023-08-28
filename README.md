@@ -2,19 +2,37 @@
 
 ROSNode that takes in mpa data and published it to ROS. There are 9 pieces of metadata with each tag detection publish.
 
-## Build Instructions and Installation
+## Simple Installation of Prebuilt liske_tag_publisher_0.0.5 ipk
 
-0. Make sure adb is set up correctly on voxl and PC: https://docs.modalai.com/setting-up-adb/
+0. Download and Install Prerequisites
+    * Make sure adb is set up correctly on voxl and PC: https://docs.modalai.com/setting-up-adb/
+    * Download the liske_tag_publisher repository
 
-1. Requires the voxl-emulator (found [here](https://gitlab.com/voxl-public/support/voxl-docker)) to run docker ARM image
+1. Install Pre-Built ipk Package onto Voxl
+    * on (PC), run the command``` cd [Path To]/liske_tag_publisher```
+    * followed by (PC) ```./deploy_to_voxl.sh```
+
+
+
+## Complete Build Instructions and Installation
+
+0. Download and Install Prerequisites
+    * Download the liske_tag_publisher repository
+    * Make sure adb is set up correctly on voxl and PC: https://docs.modalai.com/setting-up-adb/
+    * Make sure docker is set up correctly on host PC: https://docs.modalai.com/voxl-docker-and-cross-installation/
+
+1. Install and run voxl-emulator docker image
     * If voxl-emulator is not already installed:
+    * Download the voxl-docker Repository (found [here](https://gitlab.com/voxl-public/support/voxl-docker))
+    * Download the prebuilt voxl-emulator image found ([here](https://developer.modalai.com/asset/eula-download/75)) and place it inside the voxl-docker directory
     * (PC) ```cd [Path To]/voxl-docker```
-    * (PC) ```sudo install-emulator-docker.sh``` 
+    * (PC) ```sudo sh install-emulator-docker.sh``` 
+    * (PC) Verify installation with ```docker images``` and make sure that voxl-emulator is present on the list
     * If voxl-emulator is installed continue here:
     * (PC) ```cd [Path To]/liske_tag_publisher```
     * (PC) ```sudo voxl-docker -i voxl-emulator:V1.7```  (or whatever version you are using)
 2. Build project binary:
-    * (VOXL-EMULATOR) ```./install_build_deps.sh apq8096 dev```
+    * (VOXL-EMULATOR) ```./install_build_deps.sh apq8096 dev``` 
     * (VOXL-EMULATOR) ```./clean.sh```
     * (VOXL-EMULATOR) ```./build.sh apq8096```
     * (VOXL-EMULATOR) ```./make_package.sh ipk```
@@ -32,19 +50,19 @@ Connect to the voxl through adb or ssh:
 
 Run the following commands(on voxl):
 
-Verify your ros environment with:
+Verify the configuration your ros environment with:
 ```
 vi ~/my_ros_env.sh
 ```
 
 if you make any changes make sure to run ```exec bash``` to re-source the file
 
-start a ros master onn the voxl with
+start a ros master on the voxl with
 ```
 roscore
 ```
 
-and then start the node with:
+and then, in a new terminal, ```adb shell``` or ```sudo ssh``` into voxl, and start the node with:
 
 ```
 rosrun liske_tag_publisher liske_tag_publisher_node
